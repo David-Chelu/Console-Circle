@@ -1,0 +1,2 @@
+bufferWidth = 238
+bufferHeight = 125
