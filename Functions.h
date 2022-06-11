@@ -103,6 +103,8 @@ std::vector<int> ReadBufferSizeFromWindow()
     bufferSize.push_back(consoleBufferInfo->dwSize.X);
     bufferSize.push_back(consoleBufferInfo->srWindow.Bottom - consoleBufferInfo->srWindow.Top);
 
+    delete consoleBufferInfo;
+
     std::cout << bufferSize[0] << ", "
               << bufferSize[1];
 
