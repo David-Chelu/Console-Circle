@@ -17,11 +17,9 @@ void SetCursor(SHORT xCursor = 0, SHORT yCursor = 0)
 // this function reads the file "data.txt", which is supposed to contain the console buffer width and height
 std::vector<int> ReadBufferSizeFromFile(const char *directory)
 {
-    // STL file input object
     std::ifstream
         fileReader;
 
-    // the vector that will contain the values for the console buffer
     std::vector<int>
         bufferSize;
 
@@ -81,6 +79,33 @@ std::vector<int> ReadBufferSizeFromFile(const char *directory)
     }
 
     // the resulted vector will be returned, be it containing the default hard coded values, or the ones read from the file
+    return bufferSize;
+}
+
+// this function makes use of windows functions to directly check the buffer size of the console
+std::vector<int> ReadBufferSizeFromWindow()
+{
+    PCONSOLE_SCREEN_BUFFER_INFO
+        consoleBufferInfo = new CONSOLE_SCREEN_BUFFER_INFO;
+
+    std::vector<int>
+        bufferSize;
+
+    BOOL
+        result = GetConsoleScreenBufferInfo(Default::consoleOutputHandle,
+                                            consoleBufferInfo);
+
+    if (!result)
+    {
+        return ReadBufferSizeFromFile("data.txt");
+    }
+
+    bufferSize.push_back(consoleBufferInfo->dwSize.X);
+    bufferSize.push_back(consoleBufferInfo->srWindow.Bottom - consoleBufferInfo->srWindow.Top);
+
+    std::cout << bufferSize[0] << ", "
+              << bufferSize[1];
+
     return bufferSize;
 }
 
